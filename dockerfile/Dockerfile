@@ -2,7 +2,7 @@
 ARG UPSTREAM
 FROM alpine as runtime
 COPY --from=wyga/config-service /client/config-service /dist/sbin/config-service
-COPY --chmod=0755 entrypoint.sh /dist/entrypoint/unginx
+COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
 COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config
 COPY 404.html /dist/usr/share/nginx/404/404.html
@@ -21,4 +21,4 @@ COPY --from=mold / /
 EXPOSE 80
 STOPSIGNAL SIGQUIT
 CMD ["nginx", "-g", "daemon off;" ]
-ENTRYPOINT [ "/entrypoint/unginx" ]
+ENTRYPOINT [ "/.entrypoint/unginx" ]
