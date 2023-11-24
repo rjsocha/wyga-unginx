@@ -1,0 +1,18 @@
+if nv="$(docker run --rm --pull always -q "${UPSTREAM}:latest" cat /metadata/nginx/version)"
+then
+  if [[ ${nv} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+  then
+      nv="${nv%-*}"
+      MAJOR_VERSION="${nv%.*}"
+      MINOR_VERSION="${nv##*.}"
+      VERSION="${nv}"
+      UPSTREAM="${UPSTREAM}:${VERSION}"
+      shadow-text 3 "NGINX ${nv}"
+  else
+    printf -- "ERROR: unable to parse upstream NGINX version ...\n"
+    exit 100
+  fi
+else
+  printf -- "ERROR: failed to retrieve nginx version ...\n"
+  exit 100
+fi
