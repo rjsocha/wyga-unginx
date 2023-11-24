@@ -1,7 +1,5 @@
 export NAME="unginx"
-
-UPSTREAM="wyga/nginx-slim"
-
+UPSTREAM="${UPSTREAM:-wyga/nginx-slim}"
 export BUILD_ARGS="UPSTREAM VERSION"
 export TAGS="latest @VERSION @MAJOR_VERSION"
 export PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
