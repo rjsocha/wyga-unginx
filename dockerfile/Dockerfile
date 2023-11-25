@@ -1,8 +1,7 @@
 # syntax=docker/dockerfile:1.6
 ARG UPSTREAM
 FROM alpine as runtime
-ARG CONFIGUS
-COPY --from=${CONFIGUS} /client/config-service /dist/sbin/config-service
+COPY --from=wyga/configus:1.6.1 /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
 COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config

@@ -1,7 +1,6 @@
 export NAME="unginx"
 UPSTREAM="${UPSTREAM:-wyga/nginx-slim}"
-export CONFIGUS="wyga/configus:1.6.1"
-export BUILD_ARGS="UPSTREAM VERSION CONFIGUS"
+export BUILD_ARGS="UPSTREAM VERSION"
 export TAGS="latest @VERSION @MAJOR_VERSION"
 export PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
 export DOCKER_BUILDER="multiplatform-builder"
