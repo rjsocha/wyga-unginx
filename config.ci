@@ -13,7 +13,7 @@ BUILDX_CONFIG+=( "--builder" "${DOCKER_BUILDER}" )
 BUILDX_CONFIG+=( "--platform" "${PLATFORMS}" )
 BUILDX_CONFIG+=( "--provenance" "false" )
 BUILDX_CONFIG+=( "--progress" "plain" )
-BUILDX_CONFIG+=( "--pull" )
+BUILDX_CONFIG+=( "--pull --no-cache" )
 
 if [[ -z ${CI_REGISTRY_IMAGE:-} ]]
 then
