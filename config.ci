@@ -23,4 +23,3 @@ else
   BUILDX_CONFIG+=( "--output" "${OUTPUT_IMAGE}" )
   unset NOLOG
 fi
-
