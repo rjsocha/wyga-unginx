@@ -1,4 +1,4 @@
-if nv="$(docker run --rm --pull always -q "${UPSTREAM}:latest" cat /metadata/nginx/version)"
+if nv="$(docker run --rm --pull always -q "${UPSTREAM}:latest" cat /.metadata/nginx/version)"
 then
   if [[ ${nv} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
   then
