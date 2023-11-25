@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1.6
 ARG UPSTREAM
+ARG CONFIGUS
+FROM ${CONFIGUS} AS configus
 FROM alpine as runtime
-COPY --from=wyga/configus:1.6.1 /client/config-service /dist/sbin/config-service
+COPY --from=configus /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
 COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config
@@ -20,5 +22,6 @@ FROM scratch
 COPY --from=mold / /
 EXPOSE 80
 STOPSIGNAL SIGQUIT
+USER 35000:35000
 CMD ["nginx", "-g", "daemon off;" ]
 ENTRYPOINT [ "/.entrypoint/unginx" ]
