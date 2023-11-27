@@ -14,7 +14,7 @@ COPY --chmod=0666 empty.conf /dist/config/nginx/stream/default
 COPY --chmod=0666 global.conf /dist/config/nginx/global/default
 COPY --chmod=0666 default.conf /dist/config/nginx/site/default
 COPY --chmod=0644 nginx.conf /dist/etc/nginx/nginx.conf
-RUN chmod 777 /dist/config/site /dist/config/nginx/http /dist/config/nginx/stream /dist/config/nginx/global
+RUN chmod 777 /dist/config/nginx/site /dist/config/nginx/http /dist/config/nginx/stream /dist/config/nginx/global
 
 FROM ${UPSTREAM} AS mold
 COPY --from=runtime /dist/ /
