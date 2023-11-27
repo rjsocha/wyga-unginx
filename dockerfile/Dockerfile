@@ -5,6 +5,7 @@ FROM ${CONFIGUS} AS configus
 FROM alpine as runtime
 COPY --from=configus /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
+COPY --chmod=0755 home-config.sh /dist/sbin/home-config
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
 COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config
 COPY 404.html /dist/usr/share/nginx/404/404.html
@@ -24,6 +25,8 @@ FROM scratch
 COPY --from=mold / /
 EXPOSE 80
 STOPSIGNAL SIGQUIT
+ENV PATH=/bin:/sbin:/usr/sbin:/usr/bin
+ENV HOME=/dev/shm/.home
 USER 35000:35000
 CMD ["nginx", "-g", "daemon off;" ]
 ENTRYPOINT [ "/.entrypoint/unginx" ]
