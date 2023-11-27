@@ -8,11 +8,13 @@ COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
 COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config
 COPY 404.html /dist/usr/share/nginx/404/404.html
-COPY --chmod=0666 default.conf /dist/config/nginx/http/default
-COPY empty.conf /dist/config/nginx/stream/default
-COPY --chmod=0666 main.conf /dist/config/nginx/main/default
-COPY --chmod=0666 nginx.conf /dist/etc/nginx/nginx.conf
-RUN chmod 777 /dist/config/nginx /dist/config/nginx/http /dist/config/nginx/stream/ /dist/config/nginx/main/
+# Configuration
+COPY --chmod=0666 http.conf /dist/config/nginx/http/default
+COPY --chmod=0666 empty.conf /dist/config/nginx/stream/default
+COPY --chmod=0666 global.conf /dist/config/nginx/global/default
+COPY --chmod=0666 default.conf /dist/config/nginx/site/default
+COPY --chmod=0644 nginx.conf /dist/etc/nginx/nginx.conf
+RUN chmod 777 /dist/config/site /dist/config/nginx/http /dist/config/nginx/stream /dist/config/nginx/global
 
 FROM ${UPSTREAM} AS mold
 COPY --from=runtime /dist/ /
