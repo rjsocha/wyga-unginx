@@ -16,8 +16,9 @@ COPY --chmod=0666 empty.conf /dist/config/nginx/stream/default
 COPY --chmod=0666 global.conf /dist/config/nginx/global/default
 COPY --chmod=0666 default.conf /dist/config/nginx/site/default
 COPY --chmod=0644 nginx.conf /dist/etc/nginx/nginx.conf
-RUN mkdir -p /dist/config/nginx/depot
-RUN chmod 777 /dist/config/nginx/site /dist/config/nginx/http /dist/config/nginx/stream /dist/config/nginx/global /dist/config/nginx/depot
+WORKDIR /dist/config/nginx
+RUN mkdir -p depot auth mold
+RUN chmod 777 site http stream global depot auth mold
 
 FROM ${UPSTREAM} AS mold
 COPY --from=runtime /dist/ /
