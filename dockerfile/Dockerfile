@@ -21,6 +21,7 @@ COPY --chmod=0655 profile/ping profile/ping
 WORKDIR /dist/config/nginx/auth
 WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/mold
+WORKDIR /dist/config/nginx
 RUN chmod 777 site http stream global depot auth mold
 
 FROM ${UPSTREAM} AS mold
