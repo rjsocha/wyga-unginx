@@ -16,23 +16,6 @@ CONTEXT="context"
 DOCKERFILE="dockerfile/Dockerfile"
 CI_LOGS=".ci/log"
 
-# Locate project root directory
-while [[ ! -f .gitlab-ci.yml ]]
-do
-  cd ..
-  if [[ $(pwd) == "/" ]]
-  then
-    printf -- "ERROR: Unable to locate the project's root folder ...\n"
-    exit 100
-  fi
-done
-if ! grep -q "#::PROJECT:CI:${NAME^^}" ".gitlab-ci.yml"
-then
-  printf -- "ERROR: Unable to locate the project's root folder (incorrect .gitlab-ci.yml file) ...\n"
-  exit 100
-fi
-export PATH="$(pwd)/ci:$(pwd):${PATH}"
-
 if ! [[ -d ${CONTEXT} ]]
 then
   printf -- "ERROR: missing context directory: %s ...\n" "${CONTEXT}"
