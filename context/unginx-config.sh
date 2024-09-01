@@ -6,5 +6,10 @@ if [ -n "${CONFIGUS:-}" ]; then
   exec config-service "${CONFIGUS}"
 fi
 if [ -n "${UNGINX_PROFILE:-}" ]; then
-  printf -- "PROFILE: %s\n" "${UNGINX_PROFILE}"
+  if [ -f "/config/nginx/profile/${UNGINX_PROFILE}" ]; then
+    printf -- "PROFILE: %s\n" "${UNGINX_PROFILE}"
+    cp -- "/config/nginx/profile/${UNGINX_PROFILE}" "/config/nginx/site/default"
+  else
+    printf -- "PROFILE: <MISSING>%s\n"
+  fi
 fi
