@@ -11,14 +11,16 @@ COPY --chmod=0755 unginx-config.sh /dist/sbin/unginx-config
 COPY 404.html /dist/usr/share/nginx/404/404.html
 COPY --chmod=0444 configus.meta /dist/.metadata/configus
 # Configuration
+COPY --chmod=0644 nginx.conf /dist/etc/nginx/nginx.conf
 WORKDIR /dist/config/nginx
 COPY --chmod=0666 http.conf    http/default
 COPY --chmod=0666 empty.conf   stream/default
 COPY --chmod=0666 global.conf  global/default
 COPY --chmod=0666 default.conf site/default
-COPY --chmod=0644 nginx.conf   nginx/nginx.conf
 COPY --chmod=0655 profile/ping profile/ping
-RUN mkdir -p depot auth mold
+WORKDIR /dist/config/nginx/auth
+WORKDIR /dist/config/nginx/depot
+WORKDIR /dist/config/nginx/mold
 RUN chmod 777 site http stream global depot auth mold
 
 FROM ${UPSTREAM} AS mold
