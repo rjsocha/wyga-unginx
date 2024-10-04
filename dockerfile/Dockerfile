@@ -17,8 +17,7 @@ COPY --chmod=0666 http.conf    http/default
 COPY --chmod=0666 empty.conf   stream/default
 COPY --chmod=0666 global.conf  global/default
 COPY --chmod=0666 default.conf site/default
-COPY --chmod=0644 profile/ping profile/ping
-COPY --chmod=0644 profile/symfony profile/symfony
+COPY --chmod=0644 profile/ profile/
 WORKDIR /dist/config/nginx/auth
 WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/mold
