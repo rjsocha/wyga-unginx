@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.6
+# syntax=docker/dockerfile:1.9
 ARG UPSTREAM
 ARG CONFIGUS
 FROM ${CONFIGUS} AS configus
@@ -7,17 +7,21 @@ COPY --from=configus /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 home-config.sh /dist/sbin/home-config
 COPY --chmod=0755 auth-config.sh /dist/sbin/auth-config
-COPY --chmod=0755 configus-config.sh /dist/sbin/configus-config
+COPY --chmod=0755 unginx-config.sh /dist/sbin/unginx-config
 COPY 404.html /dist/usr/share/nginx/404/404.html
 COPY --chmod=0444 configus.meta /dist/.metadata/configus
 # Configuration
-COPY --chmod=0666 http.conf /dist/config/nginx/http/default
-COPY --chmod=0666 empty.conf /dist/config/nginx/stream/default
-COPY --chmod=0666 global.conf /dist/config/nginx/global/default
-COPY --chmod=0666 default.conf /dist/config/nginx/site/default
 COPY --chmod=0644 nginx.conf /dist/etc/nginx/nginx.conf
 WORKDIR /dist/config/nginx
-RUN mkdir -p depot auth mold
+COPY --chmod=0666 http.conf    http/default
+COPY --chmod=0666 empty.conf   stream/default
+COPY --chmod=0666 global.conf  global/default
+COPY --chmod=0666 default.conf site/default
+COPY --chmod=0644 profile/ profile/
+WORKDIR /dist/config/nginx/auth
+WORKDIR /dist/config/nginx/depot
+WORKDIR /dist/config/nginx/mold
+WORKDIR /dist/config/nginx
 RUN chmod 777 site http stream global depot auth mold
 
 FROM ${UPSTREAM} AS mold

@@ -1,0 +1,24 @@
+server {
+  root /web/app/current/public;
+  listen 80;
+  server_name _ default;
+
+  client_max_body_size 16M;
+
+  location / {
+    location ~ [^/]\.php(/|$) {
+      fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+      if (!-f $realpath_root$fastcgi_script_name) { return 404; }
+      include fastcgi_params;
+      fastcgi_param HTTP_PROXY "";
+      fastcgi_param PATH_INFO $fastcgi_path_info;
+      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+      fastcgi_param REALPATH_ROOT $realpath_root;
+      fastcgi_param SERVER_PORT "443";
+      fastcgi_param HTTPS "on";
+      fastcgi_pass endpoint-php-fpm:9000;
+    }
+    index index.html index.php;
+    try_files $uri /index.php$is_args$args;
+ }
+}
