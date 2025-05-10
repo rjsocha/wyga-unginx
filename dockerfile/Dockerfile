@@ -4,6 +4,10 @@ ARG CONFIGUS
 FROM ${CONFIGUS} AS configus
 FROM alpine as runtime
 
+WORKDIR /dist/etc/nginx
+WORKDIR /dist/usr/share/nginx/404
+WORKDIR /
+
 COPY --from=configus /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 home-config.sh /dist/sbin/home-config
