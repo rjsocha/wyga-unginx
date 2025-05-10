@@ -1,0 +1,12 @@
+include:
+  - project: ci/hub
+    ref:     v2.x
+    file:    image-builder.yaml
+
+stages:
+  - image-builder
+
+Build uNginx Image:
+  extends: .ci:image-builder
+  script:
+    - ci-builder
