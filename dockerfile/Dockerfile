@@ -1,11 +1,14 @@
-# syntax=docker/dockerfile:1.6
+# syntax=docker/dockerfile:1
 ARG UPSTREAM
 ARG CONFIGUS
 FROM ${CONFIGUS} AS configus
-FROM alpine as runtime
+FROM alpine:3 as runtime
 
+WORKDIR /dist/sbin
+WORKDIR /dist/.entrypoint
 WORKDIR /dist/etc/nginx
 WORKDIR /dist/usr/share/nginx/404
+WORKDIR /dist/.metadata
 WORKDIR /
 
 COPY --from=configus /client/config-service /dist/sbin/config-service
@@ -22,25 +25,20 @@ COPY --chmod=0666 http.conf    http/default
 COPY --chmod=0666 empty.conf   stream/default
 COPY --chmod=0666 global.conf  global/default
 COPY --chmod=0666 default.conf site/default
-COPY --chmod=0644 profile/ profile/
+WORKDIR /dist/config/nginx/profile
+COPY --chmod=0644 profile/ .
 WORKDIR /dist/config/nginx/auth
 WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/mold
 WORKDIR /dist/config/nginx
 RUN chmod 777 site http stream global depot auth mold
-RUN umask
-RUN echo "1" && ls -l /dist/
-RUN echo "xxx"
-RUN echo "2" && ls -lR /dist/
 
 FROM ${UPSTREAM} AS mold
 COPY --from=runtime /dist/ /
 RUN rm -rf /etc/nginx/conf.d && chmod 777 /var/log/nginx /var/cache/nginx
-RUN echo "2" && ls -l /
 
 FROM scratch
 COPY --from=mold / /
-RUN echo "3" && ls -l /
 EXPOSE 80
 STOPSIGNAL SIGQUIT
 ENV PATH=/bin:/sbin:/usr/sbin:/usr/bin
