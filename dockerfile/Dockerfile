@@ -24,7 +24,9 @@ WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/mold
 WORKDIR /dist/config/nginx
 RUN chmod 777 site http stream global depot auth mold
+RUN umask
 RUN echo "1" && ls -l /dist/
+RUN echo "xxx"
 RUN echo "2" && ls -lR /dist/
 
 FROM ${UPSTREAM} AS mold
