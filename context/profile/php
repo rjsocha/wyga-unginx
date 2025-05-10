@@ -14,7 +14,7 @@ server {
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param REALPATH_ROOT $realpath_root;
-    fastcgi_pass endpoint-php-fpm:9000;
+    fastcgi_pass php-engine:9000;
   }
 
   location / {
