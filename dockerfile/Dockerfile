@@ -33,7 +33,7 @@ RUN echo "2" && ls -l /
 FROM scratch
 COPY --from=mold / /
 RUN echo "3" && ls -l /
-EXPOSE  
+EXPOSE 80
 STOPSIGNAL SIGQUIT
 ENV PATH=/bin:/sbin:/usr/sbin:/usr/bin
 ENV HOME=/dev/shm/.home
