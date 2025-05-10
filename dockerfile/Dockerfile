@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.9
+# syntax=docker/dockerfile:1.6
 ARG UPSTREAM
 ARG CONFIGUS
 FROM ${CONFIGUS} AS configus
