@@ -3,6 +3,7 @@ ARG UPSTREAM
 ARG CONFIGUS
 FROM ${CONFIGUS} AS configus
 FROM alpine as runtime
+
 COPY --from=configus /client/config-service /dist/sbin/config-service
 COPY --chmod=0755 entrypoint.sh /dist/.entrypoint/unginx
 COPY --chmod=0755 home-config.sh /dist/sbin/home-config
@@ -23,7 +24,8 @@ WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/mold
 WORKDIR /dist/config/nginx
 RUN chmod 777 site http stream global depot auth mold
-RUN echo "1" && ls -l /
+RUN echo "1" && ls -l /dist/
+RUN echo "2" && ls -lR /dist/
 
 FROM ${UPSTREAM} AS mold
 COPY --from=runtime /dist/ /
