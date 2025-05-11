@@ -2,6 +2,7 @@
 #::CLIENT_MAX_BODY_SIZE=64M
 #::ROOT=/web/app/current/public
 #::PHP_ENDPOINT=php-engine
+#::PHP_ENDPOINT_PORT=9000
 #::PHP_INDEX=index.php
 #PROFILE=php/fpm
 server {
@@ -17,7 +18,7 @@ server {
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param REALPATH_ROOT $realpath_root;
-    fastcgi_pass {{PHP_ENDPOINT}}:9000;
+    fastcgi_pass {{PHP_ENDPOINT}}:{{PHP_ENDPOINT_PORT}};
   }
   location = / {
     index index.html {{PHP_INDEX}};
