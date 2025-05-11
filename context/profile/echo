@@ -1,0 +1,11 @@
+#::SERVER_NAME=default
+#::RESPONSE=OK
+#PROFILE=echo
+server {
+  listen {{LISTEN}} default_server;
+  server_name {{SERVER_NAME}};
+  location / {
+    default_type text/plain;
+    return 200 "{{RESPONSE}}\n";
+  }
+}

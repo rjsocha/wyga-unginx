@@ -1,0 +1,45 @@
+#::SERVER_NAME=default
+#::CLIENT_MAX_BODY_SIZE=64M
+#::ROOT=/web/app/current/public
+#::PHP_ENDPOINT=php-engine
+#::PHP_INDEX=index.php
+#PROFILE=php/index
+server {
+  listen {{LISTEN}} default_server;
+  server_name {{SERVER_NAME}};
+
+  client_max_body_size {{CLIENT_MAX_BODY_SIZE}};
+
+  root {{ROOT}};
+
+  location ~ [^/]\.php(/|$) {
+    try_files /dev/null @engine;
+  }
+
+  location = / {
+    index index.html index.php;
+  }
+
+  location / {
+    try_files $uri @engine-index;
+  }
+
+  location @engine {
+    if (!-f $realpath_root$fastcgi_script_name) { return 404; }
+    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param HTTP_PROXY "";
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param REALPATH_ROOT $realpath_root;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    fastcgi_pass {{PHP_ENDPOINT}}:9000;
+  }
+
+  location @engine-index {
+    include fastcgi_params;
+    fastcgi_param HTTP_PROXY "";
+    fastcgi_param REALPATH_ROOT $realpath_root;
+    fastcgi_param SCRIPT_FILENAME $realpath_root/{{PHP_INDEX}};
+    fastcgi_pass {{PHP_ENDPOINT}}:9000;
+  }
+}

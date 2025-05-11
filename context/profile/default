@@ -1,6 +1,7 @@
+#::SERVER_NAME=default
 server {
-  listen 80 default_server;
-  server_name _;
+  listen {{LISTEN}} default_server;
+  server_name {{SERVER_NAME}};
   error_page 404 /404.html;
   location / {
     return 404;
