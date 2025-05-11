@@ -1,3 +1,5 @@
+log_format fastcgi 'RPR:$realpath_root FSN:$fastcgi_script_name FPI:$fastcgi_path_info';
+
 server {
   listen 80;
   server_name _ default;
@@ -25,6 +27,7 @@ server {
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param REALPATH_ROOT $realpath_root;
     fastcgi_pass php-engine:9000;
+    access_log        /var/log/nginx/fastcgi.log fastcgi;
   }
 
 }
