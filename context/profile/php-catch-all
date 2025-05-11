@@ -14,13 +14,22 @@ server {
 
   location / {
     index index.html index.php;
-    set $fastcgi_script_name /index.php;
-    try_files $uri @engine;
+    try_files $uri @engine-catch;
   }
 
   location @engine {
     if (!-f $realpath_root$fastcgi_script_name) { return 404; }
     fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param HTTP_PROXY "";
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param REALPATH_ROOT $realpath_root;
+    fastcgi_param SCRIPT_FILENAME $realpath_root/index.php;
+    fastcgi_pass php-engine:9000;
+    access_log        /var/log/nginx/fastcgi.log fastcgi;
+  }
+
+  location @engine-catch {
     include fastcgi_params;
     fastcgi_param HTTP_PROXY "";
     fastcgi_param PATH_INFO $fastcgi_path_info;
