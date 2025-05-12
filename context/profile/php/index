@@ -4,6 +4,8 @@
 #::ENDPOINT=php-fpm
 #::ENDPOINT_PORT=9000
 #::INDEX=index.php
+#::READ_TIMEOUT=60
+#::SEND_TIMEOUT=60
 #PROFILE=php/index
 server {
   listen {{LISTEN}} default_server;
@@ -23,6 +25,8 @@ server {
     if (!-f $realpath_root$fastcgi_script_name) { return 404; }
     fastcgi_split_path_info ^(.+?\.php)(/.*)$;
     include fastcgi_params;
+    fastcgi_read_timeout {{READ_TIMEOUT}};
+    fastcgi_send_timeout {{SEND_TIMEOUT}};
     fastcgi_param HTTP_PROXY "";
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param REALPATH_ROOT $realpath_root;
@@ -31,6 +35,8 @@ server {
   }
   location @engine-index {
     include fastcgi_params;
+    fastcgi_read_timeout {{READ_TIMEOUT}};
+    fastcgi_send_timeout {{SEND_TIMEOUT}};
     fastcgi_param HTTP_PROXY "";
     fastcgi_param REALPATH_ROOT $realpath_root;
     fastcgi_param SCRIPT_FILENAME $realpath_root/{{INDEX}};
