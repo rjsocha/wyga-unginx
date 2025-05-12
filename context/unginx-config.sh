@@ -6,6 +6,7 @@ if [ -n "${CONFIGUS:-}" ]; then
   exec config-service "${CONFIGUS}"
 fi
 if [ -n "${PROFILE-}" ] && [ "${PROFILE-}" != "none" ]; then
+  printf -- "UNGINX RUNTIME: 1.0.0 (%s/%s) PROFILE: %s\n" "$(id -u)" "$(id -g)" "${PROFILE}" >&2 || true
   if ! template-engine "${PROFILE}" "/config/nginx/site/default"; then
     rc=$?
     echo RC: $rc
