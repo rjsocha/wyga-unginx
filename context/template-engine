@@ -24,21 +24,21 @@ local selected="${1}"
     exit 1
   fi
   printf -- "PROFILE: %s\n" "${selected}"
-  printf -- "%-30.30s %-30.30s %s\n" "ENV" "DEFAULT" "VALUE"
-  printf -- "--------------------------------------------------------------------\n"
-  printf -- "%-30.30s %-30.30s %s\n" "LISTEN" "8080" "${LISTEN-8080}"
+  printf -- "%-38.38s %-30.30s %s\n" "ENV" "DEFAULT" "VALUE"
+  printf -- "----------------------------------------------------------------------------\n"
+  printf -- "%-38.38s %-30.30s %s\n" "LISTEN" "8080" "${LISTEN-8080}"
   grep -E '^#::[A-Z_]+=.+$' "${PROFILES}/${selected}" | cut -c 4- | while read template; do
     key="$(echo -n "${template}" | awk -F= '{print $1}')"
     val="$(echo -n "${template}" | awk -F= '{print $2}')"
-    config_key="\${CFG_${key}}"
-    config_key_set="\${CFG_${key}+set}"
+    config_key="\${${key}}"
+    config_key_set="\${${key}+set}"
     eval "config_set=${config_key_set}"
     if [ -n "${config_set}" ]; then
       eval "config=${config_key}"
     else
      config="${val}"
     fi
-    printf -- "%-30.30s %-30.30s %s\n" "CFG_${key}" "${val}" "${config}"
+    printf -- "%-38.38s %-30.30s %s\n" "${key}" "${val}" "${config}"
   done
 }
 
@@ -93,8 +93,8 @@ set --
 while read template; do
   key="$(echo -n "${template}" | awk -F= '{print $1}')"
   val="$(echo -n "${template}" | awk -F= '{print $2}')"
-  config_key="\${CFG_${key}}"
-  config_key_set="\${CFG_${key}+set}"
+  config_key="\${${key}}"
+  config_key_set="\${${key}+set}"
   eval "config_set=${config_key_set}"
   if [ -n "${config_set}" ]; then
     eval "config=${config_key}"

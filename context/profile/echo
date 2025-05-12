@@ -1,11 +1,11 @@
-#::SERVER_NAME=default
-#::RESPONSE=OK
+#::NGX_SERVER_NAME=default
+#::NGX_RESPONSE=OK
 #PROFILE=echo
 server {
   listen {{LISTEN}} default_server;
-  server_name {{SERVER_NAME}};
+  server_name {{NGX_SERVER_NAME}};
   location / {
     default_type text/plain;
-    return 200 "{{RESPONSE}}\n";
+    return 200 "{{NGX_RESPONSE}}\n";
   }
 }

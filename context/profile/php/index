@@ -1,22 +1,22 @@
-#::SERVER_NAME=default
-#::CLIENT_MAX_BODY_SIZE=64M
-#::ROOT=/web/app/current/public
-#::ENDPOINT=php-fpm
-#::ENDPOINT_PORT=9000
-#::INDEX=index.php
-#::READ_TIMEOUT=60
-#::SEND_TIMEOUT=60
+#::NGX_ROOT=/web/app/current/public
+#::NGX_FASTCGI_PASS=localhost:9000
+#::NGX_FASTCGI_READ_TIMEOUT=60
+#::NGX_FASTCGI_SEND_TIMEOUT=60
+#::NGX_FASTCGI_IGNORE_CLIENT_ABORT=off
+#::NGX_CLIENT_MAX_BODY_SIZE=64M
+#::NGX_INDEX=index.php
+#::NGX_SERVER_NAME=default
 #PROFILE=php/index
 server {
   listen {{LISTEN}} default_server;
-  server_name {{SERVER_NAME}};
-  client_max_body_size {{CLIENT_MAX_BODY_SIZE}};
-  root {{ROOT}};
+  server_name {{NGX_SERVER_NAME}};
+  client_max_body_size {{NGX_CLIENT_MAX_BODY_SIZE}};
+  root {{NGX_ROOT}};
   location ~ [^/]\.php(/|$) {
     try_files /dev/null @engine;
   }
   location = / {
-    index index.html {{INDEX}};
+    index index.html {{NGX_INDEX}};
   }
   location / {
     try_files $uri @engine-index;
@@ -25,21 +25,23 @@ server {
     if (!-f $realpath_root$fastcgi_script_name) { return 404; }
     fastcgi_split_path_info ^(.+?\.php)(/.*)$;
     include fastcgi_params;
-    fastcgi_read_timeout {{READ_TIMEOUT}};
-    fastcgi_send_timeout {{SEND_TIMEOUT}};
+    fastcgi_ignore_client_abort {{NGX_FASTCGI_IGNORE_CLIENT_ABORT}};
+    fastcgi_read_timeout {{NGX_FASTCGI_READ_TIMEOUT}};
+    fastcgi_send_timeout {{NGX_FASTCGI_SEND_TIMEOUT}};
     fastcgi_param HTTP_PROXY "";
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param REALPATH_ROOT $realpath_root;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-    fastcgi_pass {{ENDPOINT}}:{{ENDPOINT_PORT}};
+    fastcgi_pass {{NGX_FASTCGI_PASS}};
   }
   location @engine-index {
     include fastcgi_params;
-    fastcgi_read_timeout {{READ_TIMEOUT}};
-    fastcgi_send_timeout {{SEND_TIMEOUT}};
+    fastcgi_ignore_client_abort {{NGX_FASTCGI_IGNORE_CLIENT_ABORT}};
+    fastcgi_read_timeout {{NGX_FASTCGI_READ_TIMEOUT}};
+    fastcgi_send_timeout {{NGX_FASTCGI_SEND_TIMEOUT}};
     fastcgi_param HTTP_PROXY "";
     fastcgi_param REALPATH_ROOT $realpath_root;
-    fastcgi_param SCRIPT_FILENAME $realpath_root/{{INDEX}};
-    fastcgi_pass {{ENDPOINT}}:{{ENDPOINT_PORT}};
+    fastcgi_param SCRIPT_FILENAME $realpath_root/{{NGX_INDEX}};
+    fastcgi_pass {{NGX_FASTCGI_PASS}};
   }
 }

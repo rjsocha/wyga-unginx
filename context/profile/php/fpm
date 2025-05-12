@@ -1,15 +1,14 @@
-#::SERVER_NAME=default
-#::CLIENT_MAX_BODY_SIZE=64M
-#::ROOT=/web/app/current/public
-#::ENDPOINT=php-fpm
-#::ENDPOINT_PORT=9000
-#::INDEX=index.php
+#::NGX_SERVER_NAME=default
+#::NGX_CLIENT_MAX_BODY_SIZE=64M
+#::NGX_ROOT=/web/app/current/public
+#::NGX_FASTCGI_PASS=localhost:9000
+#::NGX_INDEX=index.php
 #PROFILE=php/fpm
 server {
   listen {{LISTEN}} default_server;
-  server_name {{SERVER_NAME}};
-  client_max_body_size {{CLIENT_MAX_BODY_SIZE}};
-  root {{ROOT}};
+  server_name {{NGX_SERVER_NAME}};
+  client_max_body_size {{NGX_CLIENT_MAX_BODY_SIZE}};
+  root {{NGX_ROOT}};
   location ~ [^/]\.php(/|$) {
     fastcgi_split_path_info ^(.+?\.php)(/.*)$;
     if (!-f $realpath_root$fastcgi_script_name) { return 403; }
@@ -18,10 +17,10 @@ server {
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param REALPATH_ROOT $realpath_root;
-    fastcgi_pass {{ENDPOINT}}:{{ENDPOINT_PORT}};
+    fastcgi_pass {{NGX_FASTCGI_PASS}};
   }
   location = / {
-    index index.html {{INDEX}};
+    index index.html {{NGX_INDEX}};
   }
   location / {
     try_files $uri;
