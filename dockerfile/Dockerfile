@@ -27,6 +27,7 @@ WORKDIR /dist/config/nginx/http
 WORKDIR /dist/config/nginx/stream
 WORKDIR /dist/config/nginx/global
 WORKDIR /dist/config/nginx/auth
+WORKDIR /dist/config/nginx/depot
 WORKDIR /dist/config/nginx/site
 WORKDIR /dist/config/nginx/profile
 
@@ -36,7 +37,7 @@ WORKDIR /dist/config/nginx
 COPY --chmod=0666 http.conf    /dist/config/nginx/http/default
 COPY --chmod=0666 empty.conf   /dist/config/nginx/stream/default
 COPY --chmod=0666 global.conf  /dist/config/nginx/global/default
-RUN chmod 0777 site http stream global auth
+RUN chmod 0777 site http stream global auth depot
 WORKDIR /
 
 FROM ${UPSTREAM} AS mold
